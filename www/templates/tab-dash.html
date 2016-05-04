@@ -1,0 +1,80 @@
+<ion-view view-title="Dashboard">
+<ion-nav-buttons side="left" >
+  <a class="button button-outline button-light  button-positive" ng-click="modalMisRutas.show()">Mis Rutas</a>
+</ion-nav-buttons>
+<ion-nav-buttons side="right" >
+  <a class="button button-outline button-light  button-positive" ng-click="showModalNuevaRuta()">Nueva Ruta</a>
+</ion-nav-buttons>
+  <ion-content class="padding">
+    <ui-gmap-google-map center='map.center' zoom='map.zoom' control="map.control">
+      <ui-gmap-marker idKey="0" coords='currentPos.coords' options="currentPos.options">
+      </ui-gmap-marker>
+    </ui-gmap-google-map>
+      <button type="button" class="button button-block button-positive" ng-click="save()" ng-if="mode === 'C'">
+         Guardar Ruta
+       </button>
+      <button type="button" class="button button-block button-assertive" ng-click="delete()" ng-if="mode === 'R' && __USER.rol === 'ADM'">
+         Eliminar
+       </button>
+      <button type="button" class="button button-block button-dark" ng-click="cerrarSesion()" >
+         Cerrar Sesión
+       </button>
+   
+  </ion-content>
+
+
+  <script id="modal-nuevaruta.html" type="text/ng-template">
+  <ion-modal-view>
+
+    <ion-header-bar class="bar-positive bar bar-header">
+      <h1 class="title" style="left: 64px; right: 64px;">Nueva Ruta</h1>
+      <div class="buttons">
+        <button class="button button-icon ion-close activated" ng-click="modalNuevaRuta.hide()">
+        </button>
+      </div>
+    </ion-header-bar>
+    <ion-content>
+    <form class="form" ng-submit="submitModalRuta()">
+      <div class="list list-inset">
+        <label class="item item-input">
+          <i class="icon ion-search placeholder-icon"></i>
+          <input type="text" g-places-autocomplete force-selection="true" ng-model="nuevaRuta.start" placeholder="Inicio"/>
+        </label>
+        <label class="item item-input">
+          <i class="icon ion-search placeholder-icon"></i>
+          <input type="text" g-places-autocomplete force-selection="true" ng-model="nuevaRuta.end" placeholder="Fin"/>
+        </label>
+        <div class="item">
+          <button type="submit" class="button button-block button-positive" >
+            Mostrar
+          </button>
+        </div>
+      </div>
+    </form>
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+ <script id="modal-misrutas.html" type="text/ng-template">
+  <ion-modal-view>
+
+    <ion-header-bar class="bar-positive bar bar-header">
+      <h1 class="title" style="left: 64px; right: 64px;">Mis Rutas</h1>
+      <div class="buttons">
+        <button class="button button-icon ion-close activated" ng-click="modalMisRutas.hide()">
+        </button>
+      </div>
+    </ion-header-bar>
+    <ion-content>
+      <div class="list">
+         <a class="item item-icon-left" ng-repeat="rt in misRutas" ng-click="submitModalMisRutas(rt)">
+            <i class="icon ion-map"></i>
+            <p>Inicio: {{rt.start.desc}}</p>
+            <p>Fin: {{rt.end.desc}}</p>
+         </a>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+</ion-view>
