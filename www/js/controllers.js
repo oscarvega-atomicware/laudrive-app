@@ -1,9 +1,21 @@
 angular.module('starter.controllers', [])
-
+/**
+ * @ngdoc controller
+ * @name starter.controllers.controller:LoginCtrl
+ * @description
+ * Controller de lógica de login.
+ */
 .controller('LoginCtrl', function($scope,LoginService,$state,$ionicPopup,$rootScope) {
-  $scope.user = {};
+  $scope.user = {user:"user",pass:"123"};
 
-
+  /**
+  * @ngdoc method
+  * @name login
+  * @methodOf starter.controllers.controller:LoginCtrl
+  * @description
+  * Envia lós datos de usuario y passoword al servicio.
+  *
+  */
   $scope.login = function(){
     console.debug("login")
     LoginService.login($scope.user).success(function(user){
@@ -21,10 +33,25 @@ angular.module('starter.controllers', [])
   }
 })
 
+/**
+ * @ngdoc controller
+ * @name starter.controllers.controller:DashCtrl
+ * @description
+ * Controller que maneja toda la lógica referente a rutas, render, busqueda y creación de las mismas.
+ */
 .controller('DashCtrl', function($scope,$cordovaGeolocation,$ionicModal,RouteService,$rootScope,$ionicPopup) {
     var directionsDisplay = new google.maps.DirectionsRenderer();
     var directionsService = new google.maps.DirectionsService();
     var geocoder = new google.maps.Geocoder();
+
+   /**
+  * @ngdoc method
+  * @name init
+  * @methodOf starter.controllers.controller:DashCtrl
+  * @description
+  * Inicializa la pantalla, hace render del mapa y busca las rutas favoritas.
+  *
+  */ 
   $scope.init = function(){
 
     RouteService.find().success(function(rutas){
@@ -75,17 +102,27 @@ angular.module('starter.controllers', [])
           longitude: lon+.01,
         }
       }
-
+      console.log("termina posición ")
        // instantiate google map objects for directions
       
       
       
 
+    }).catch(function(err){
+      console.error("error al obtener la posición")
     })
   }
 
 
-
+  /**
+  * @ngdoc method
+  * @name submitModalRuta
+  * @methodOf starter.controllers.controller:DashCtrl
+  * @description
+  * Recibe las rutas seleccionadas en el componente de autocompletar y envía a hacer render al metodo renderRuta..
+  *
+  * 
+  */ 
   $scope.submitModalRuta = function(){
     console.debug($scope.nuevaRuta.start,$scope.nuevaRuta.end)
     $scope.renderRuta(
@@ -107,11 +144,29 @@ angular.module('starter.controllers', [])
     
   }
 
+  /**
+  * @ngdoc method
+  * @name showModalNuevaRuta
+  * @methodOf starter.controllers.controller:DashCtrl
+  * @description
+  * Inicializa modal de nueva ruta..
+  *
+  * 
+  */ 
   $scope.showModalNuevaRuta = function(){
     $scope.nuevaRuta = {};
     $scope.modalNuevaRuta.show()
   }
 
+  /**
+  * @ngdoc method
+  * @name submitModalMisRutas
+  * @methodOf starter.controllers.controller:DashCtrl
+  * @description
+  * Inicializa modal de mis rutas..
+  *
+  * 
+  */ 
   $scope.submitModalMisRutas = function(rt){
     $scope.modalMisRutas.hide();
     $scope.currentRuta = rt;
@@ -119,6 +174,15 @@ angular.module('starter.controllers', [])
     $scope.renderRuta(rt.start,rt.end);
   }
 
+  /**
+  * @ngdoc method
+  * @name save
+  * @methodOf starter.controllers.controller:DashCtrl
+  * @description
+  * Persiste la ruta seleccionada en el servidor y añade la nueva ruta a "mis rutas"
+  *
+  * 
+  */ 
   $scope.save = function(){
     var route = {
       user:$rootScope.__USER,
@@ -149,6 +213,15 @@ angular.module('starter.controllers', [])
 
   }
 
+  /**
+  * @ngdoc method
+  * @name delete
+  * @methodOf starter.controllers.controller:DashCtrl
+  * @description
+  * Destruye una ruta
+  *
+  * 
+  */ 
   $scope.delete = function(){
     console.debug($scope.currentRuta);
     
@@ -168,6 +241,15 @@ angular.module('starter.controllers', [])
 
   }
 
+  /**
+  * @ngdoc method
+  * @name save
+  * @methodOf starter.controllers.controller:DashCtrl
+  * @description
+  * Renderea una ruta en el mapa
+  *
+  * 
+  */ 
   $scope.renderRuta = function(iniPos,endPos){
 
     $scope.iniPos.coords.latitude = iniPos.lat;
@@ -204,27 +286,4 @@ angular.module('starter.controllers', [])
   
   $scope.init();
 
-}).controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
 })
-
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
-
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
-});
